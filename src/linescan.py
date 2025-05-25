@@ -3,7 +3,7 @@ import sys
 
 """
 linescan
-Reads a raster image and tries to identify the black or white of lines in it.
+Reads a raster image and tries to identify the black or white lines in it.
 If an output (text) file is given, it writes each pixel to the file.
 
 Usage: python line-scanner.py inputfile [outputfile]
@@ -12,7 +12,7 @@ NOTE: The first line of the output file is the SIZE of the input image.
 It is NOT the location of the first pixel. That data starts on line 2.
 """
 
-# The limit, in percentage of brightness (from 0 to 1 as 0% to 100%),
+# The maximum distance, in percentage of brightness (from 0 to 1)
 # for determining "dark" pixels. This percentage represents the distance
 # from the given color to pure black. 0 = only black, 0.5 = black and grays.
 THRESHOLD = 0.5
@@ -21,7 +21,7 @@ RED, GREEN, BLUE = (255, 0, 0), (0, 255, 0), (0, 0, 255)
 BLACK, WHITE     = (0, 0, 0), (255, 255, 255)
 
 def color_dist(a, b):
-	"""Calculate the distance between 2 colors."""
+	"""Returns the distance between two colors."""
 	if a == b: return 0
 
 	max_dist = 441 # the distance between black and white
@@ -30,13 +30,13 @@ def color_dist(a, b):
 	r2, b2, g2 = b[:3]
 
 	r = (r2 - r1) ** 2
-	g = (g2 - g2) ** 2
+	g = (g2 - g1) ** 2
 	b = (b2 - b1) ** 2
 	d = (r + g + b) ** 0.5
 	return d / max_dist
 
 def find_next(pixels, size, start, reverse=False, inverted=False):
-	"""Find the next (or previous) black pixel from the starting point."""
+	"""Returns the next/previous black/white pixel from the starting point."""
 	width, height = size
 	x, y = start
 
@@ -63,7 +63,7 @@ def find_next(pixels, size, start, reverse=False, inverted=False):
 	return None
 
 def flood_fill(pixels, size, start, inverted=False, fill=RED):
-	"""Replace all adjacent dark/light pixels in the image."""
+	"""Replace all adjacent dark/light pixels. Returns visited pixels."""
 	width, height = size
 	x, y = start
 
