@@ -151,19 +151,19 @@ def main(args):
 		count = len(visited)
 		print(f"found {count} {color} pixels")
 
-		if len(args) >= 3:
-		    path = args[2]
-		    with open(path, "w") as output:
-		        output.write( str(img.size) + "\n" )
-		        output.write( "\n".join(map(str, visited)) )
-		        output.write("\n")
+	if len(args) >= 3:
+		path = args[2]
+		with open(path, "w") as output:
+			output.write( str(img.size) + "\n" )
+			output.write( "\n".join(map(str, visited)) )
+			output.write("\n")
 
-		        print(f"Done. Points written to {path}")
-		else:
-		    print("Pass an output file to save results.")
+			print(f"Done. Points written to {path}")
+	else:
+		print("Pass an output file to save results.")
 
-		img.show()
-		return visited
+	img.show()
+	return visited
 
 if __name__ == '__main__':
 	main(sys.argv)
